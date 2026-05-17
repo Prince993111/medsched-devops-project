@@ -22,6 +22,18 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 5001
+        livenessProbe:
+  httpGet:
+    path: /health
+    port: 5001
+  initialDelaySeconds: 10
+  periodSeconds: 10
+readinessProbe:
+  httpGet:
+    path: /health
+    port: 5001
+  initialDelaySeconds: 5
+  periodSeconds: 5
         env:
         - name: DB_HOST
           value: "medsched-db.c6tkesg60dib.us-east-1.rds.amazonaws.com" # 👈 Replace with your actual RDS Endpoint address
@@ -30,4 +42,15 @@ spec:
         - name: DB_USER
           value: "medadmin"
         - name: DB_PASSWORD
-          value: "SuperSecurePassword123!"
+  valueFrom:
+    secretKeyRef:
+      name: db-credentials
+      key: password
+
+      resources:
+  requests:
+    memory: "64Mi"
+    cpu: "100m"
+  limits:
+    memory: "128Mi"
+    cpu: "250m"
