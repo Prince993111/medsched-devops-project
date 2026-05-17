@@ -10,4 +10,4 @@ spec:
   ports:
     - protocol: TCP
       port: 80         # The public port patients access in their browser
-      targetPort: 5000 # Routes directly to our Flask port inside the container
+      targetPort: 5001 # Routes directly to our Flask port inside the container
