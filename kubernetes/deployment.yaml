@@ -22,3 +22,12 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 5001
+        env:
+        - name: DB_HOST
+          value: "medsched-db.c6tkesg60dib.us-east-1.rds.amazonaws.com" # 👈 Replace with your actual RDS Endpoint address
+        - name: DB_NAME
+          value: "medsched"
+        - name: DB_USER
+          value: "medadmin"
+        - name: DB_PASSWORD
+          value: "SuperSecurePassword123!"
