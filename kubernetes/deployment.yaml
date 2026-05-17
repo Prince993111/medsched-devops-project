@@ -21,4 +21,4 @@ spec:
         image: 276739967270.dkr.ecr.us-east-1.amazonaws.com/medsched-app:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 5000
+        - containerPort: 5001
