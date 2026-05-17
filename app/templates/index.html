@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedSched - Advanced Booking</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px 0; }
+        .form-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 400px; }
+        h2 { text-align: center; color: #333; margin-bottom: 20px; }
+        label { font-weight: bold; display: block; margin-top: 12px; color: #555; }
+        input, textarea, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: Arial, sans-serif; }
+        textarea { resize: vertical; height: 60px; }
+        button { width: 100%; background-color: #007bff; color: white; padding: 12px; border: none; border-radius: 4px; margin-top: 25px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>MedSched Patient Intake</h2>
+        <form method="POST">
+            <label>Patient Name:</label>
+            <input type="text" name="name" placeholder="John Doe" required>
+            
+            <label>ID Card / Passport Number:</label>
+            <input type="text" name="id_card" placeholder="A1234567B" required>
+
+            <label>Residential Address:</label>
+            <textarea name="address" placeholder="123 Health Ave, Suite 4" required></textarea>
+
+            <label>Reason for Visit / Disease / Symptoms:</label>
+            <input type="text" name="disease" placeholder="e.g., General checkup, Fever, Cough" required>
+            
+            <div style="display: flex; gap: 15px;">
+                <div style="flex: 1;">
+                    <label>Preferred Date:</label>
+                    <input type="date" name="date" required>
+                </div>
+                <div style="flex: 1;">
+                    <label>Preferred Time:</label>
+                    <input type="time" name="time" required>
+                </div>
+            </div>
+            
+            <button type="submit">Submit Appointment Request</button>
+        </form>
+    </div>
+</body>
+</html>

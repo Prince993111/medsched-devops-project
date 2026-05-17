@@ -1,0 +1,23 @@
+# kubernetes/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medsched-app-deployment
+  labels:
+    app: medsched-app
+spec:
+  replicas: 2 # Runs 2 copies across your nodes for high availability
+  selector:
+    matchLabels:
+      app: medsched-app
+  template:
+    metadata:
+      labels:
+        app: medsched-app
+    spec:
+      containers:
+      - name: medsched-app-container
+        # We will update this placeholder image path to your AWS ECR path in the next step!
+        image: 276739967270.dkr.ecr.us-east-1.amazonaws.com/medsched-app:v2
+        ports:
+        - containerPort: 5000

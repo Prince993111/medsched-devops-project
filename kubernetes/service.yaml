@@ -1,0 +1,13 @@
+# kubernetes/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: medsched-app-service
+spec:
+  type: LoadBalancer 
+  selector:
+    app: medsched-app
+  ports:
+    - protocol: TCP
+      port: 80         # The public port patients access in their browser
+      targetPort: 5000 # Routes directly to our Flask port inside the container
