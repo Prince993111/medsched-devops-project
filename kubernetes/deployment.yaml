@@ -18,6 +18,7 @@ spec:
       containers:
       - name: medsched-app-container
         # We will update this placeholder image path to your AWS ECR path in the next step!
-        image: 276739967270.dkr.ecr.us-east-1.amazonaws.com/medsched-app:v2
+        image: 276739967270.dkr.ecr.us-east-1.amazonaws.com/medsched-app:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
