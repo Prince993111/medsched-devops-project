@@ -1,0 +1,24 @@
+name: PR Code Validation
+
+on:
+  pull_request:
+    branches:
+      - main # Triggers instantly whenever a PR is opened targeting main
+
+jobs:
+  validate-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Pull down the incoming branch code to the runner
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # 2. Test the Docker compilation completely in isolation
+    - name: Test Docker Container Build
+      run: |
+        echo "Starting automated container test compilation..."
+        docker build -t medsched-app:test ./app
+        echo "Container successfully compiled with no syntax or file layout errors!"
+
+        
