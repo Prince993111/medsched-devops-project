@@ -3,47 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedSched - Advanced Booking</title>
+    <title>CNS Hospital - Health Check-up Appointment</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px 0; }
-        .form-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 400px; }
-        h2 { text-align: center; color: #333; margin-bottom: 20px; }
-        label { font-weight: bold; display: block; margin-top: 12px; color: #555; }
-        input, textarea, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: Arial, sans-serif; }
-        textarea { resize: vertical; height: 60px; }
-        button { width: 100%; background-color: #007bff; color: white; padding: 12px; border: none; border-radius: 4px; margin-top: 25px; cursor: pointer; font-size: 16px; font-weight: bold; }
-        button:hover { background-color: #0056b3; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+        }
+        h2 {
+            color: #212529;
+            margin-top: 0;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            color: #495057;
+            font-size: 15px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 15px;
+            color: #212529;
+            background-color: #fff;
+        }
+        input::placeholder, textarea::placeholder {
+            color: #adb5bd;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        textarea {
+            resize: vertical;
+            height: 70px;
+        }
+        button {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .alert {
+            padding: 12px;
+            background-color: #d1e7dd;
+            color: #0f5132;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+            border: 1px solid #badbcc;
+        }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <h2>MedSched Intake System (Automated!)</h2>
+
+    <div class="card">
+        <h2>CNS Hospital Health Check-up Appointment</h2>
+        
+        {% if message %}
+            <div class="alert">{{ message }}</div>
+        {% endif %}
+        
         <form method="POST">
-            <label>Patient Name:</label>
-            <input type="text" name="name" placeholder="John Doe" required>
-            
-            <label>ID Card / Passport Number:</label>
-            <input type="text" name="id_card" placeholder="A1234567B" required>
+            <div class="form-group">
+                <label for="patient_name">Patient Name:</label>
+                <input type="text" id="patient_name" name="patient_name" required placeholder="John Doe">
+            </div>
 
-            <label>Residential Address:</label>
-            <textarea name="address" placeholder="123 Health Ave, Suite 4" required></textarea>
+            <div class="form-group">
+                <label for="contact_number">Contact Number:</label>
+                <input type="tel" id="contact_number" name="contact_number" required placeholder="+1 (555) 000-0000">
+            </div>
 
-            <label>Reason for Visit / Disease / Symptoms:</label>
-            <input type="text" name="disease" placeholder="e.g., General checkup, Fever, Cough" required>
-            
-            <div style="display: flex; gap: 15px;">
-                <div style="flex: 1;">
-                    <label>Preferred Date:</label>
-                    <input type="date" name="date" required>
+            <div class="form-group">
+                <label for="email_address">Email Address:</label>
+                <input type="email" id="email_address" name="email_address" required placeholder="johndoe@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="identity_number">ID Card / Passport Number:</label>
+                <input type="text" id="identity_number" name="identity_number" required placeholder="A1234567B">
+            </div>
+
+            <div class="form-group">
+                <label for="residential_address">Residential Address:</label>
+                <textarea id="residential_address" name="residential_address" required placeholder="123 Health Ave, Suite 4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="visit_reason">Reason for Visit / Disease / Symptoms:</label>
+                <input type="text" id="visit_reason" name="visit_reason" required placeholder="e.g., General checkup, Fever, Cough">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="preferred_date">Preferred Date:</label>
+                    <input type="date" id="preferred_date" name="preferred_date" required>
                 </div>
-                <div style="flex: 1;">
-                    <label>Preferred Time:</label>
-                    <input type="time" name="time" required>
+                <div class="form-group">
+                    <label for="preferred_time">Preferred Time:</label>
+                    <input type="time" id="preferred_time" name="preferred_time" required>
                 </div>
             </div>
-            
+
             <button type="submit">Submit Appointment Request</button>
         </form>
     </div>
+
 </body>
 </html>

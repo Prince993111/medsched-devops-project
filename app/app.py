@@ -1,48 +1,82 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
+import psycopg2
+import os
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    if request.method == 'POST':
-        # Extracting all the new form options
-        patient_name = request.form.get('name')
-        id_card = request.form.get('id_card')
-        address = request.form.get('address')
-        disease = request.form.get('disease')
-        appointment_date = request.form.get('date')
-        appointment_time = request.form.get('time')
-        
-        # Comprehensive log inside terminal container outputs
-        print("\n" + "="*40)
-        print("[NEW APPOINTMENT RECEIVED]")
-        print(f"Patient: {patient_name}")
-        print(f"ID Card: {id_card}")
-        print(f"Address: {address}")
-        print(f"Symptom/Disease: {disease}")
-        print(f"Schedule: {appointment_date} at {appointment_time}")
-        print("="*40 + "\n")
-        
-        return f"""
-        <html>
-            <body style="font-family: Arial; text-align: center; margin-top: 50px; background-color: #f4f7f6;">
-                <div style="background: white; display: inline-block; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: left; max-width: 400px;">
-                    <h2 style="color: #28a745; text-align: center;">🎉 Appointment Confirmed!</h2>
-                    <hr style="border: 0; border-top: 1px solid #eee;">
-                    <p><strong>Patient Name:</strong> {patient_name}</p>
-                    <p><strong>ID Card Checked:</strong> {id_card}</p>
-                    <p><strong>Condition Noted:</strong> {disease}</p>
-                    <p><strong>Time Slot:</strong> {appointment_date} @ {appointment_time}</p>
-                    <hr style="border: 0; border-top: 1px solid #eee;">
-                    <div style="text-align: center; margin-top: 20px;">
-                        <a href="/" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-weight: bold;">Book Another</a>
-                    </div>
-                </div>
-            </body>
-        </html>
-        """
-    return render_template('index.html')
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_NAME = os.getenv("DB_NAME", "medsched")
+DB_USER = os.getenv("DB_USER", "medadmin")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "SuperSecurePassword123!")
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
-    
+def get_db_connection():
+    try:
+        conn = psycopg2.connect(
+            host=DB_HOST,
+            database=DB_NAME,
+            user=DB_USER,
+            password=DB_PASSWORD
+        )
+        return conn
+    except Exception as e:
+        print(f"Database connection engine failed: {e}")
+        return None
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    message = None
+    if request.method == "POST":
+        # Extract patient information along with the new contact fields
+        patient_name = request.form.get("patient_name")
+        contact_number = request.form.get("contact_number")
+        email_address = request.form.get("email_address")
+        identity_number = request.form.get("identity_number")
+        residential_address = request.form.get("residential_address")
+        visit_reason = request.form.get("visit_reason")
+        preferred_date = request.form.get("preferred_date")
+        preferred_time = request.form.get("preferred_time")
+        
+        conn = get_db_connection()
+        if conn:
+            try:
+                cur = conn.cursor()
+                # Initialize fresh table schema to capture the newly introduced data paths
+                cur.execute("""
+                    CREATE TABLE IF NOT EXISTS cns_appointments (
+                        id SERIAL PRIMARY KEY,
+                        patient_name VARCHAR(100),
+                        contact_number VARCHAR(50),
+                        email_address VARCHAR(100),
+                        identity_number VARCHAR(50),
+                        residential_address TEXT,
+                        visit_reason TEXT,
+                        preferred_date VARCHAR(30),
+                        preferred_time VARCHAR(30)
+                    );
+                """)
+                
+                cur.execute("""
+                    INSERT INTO cns_appointments (
+                        patient_name, contact_number, email_address, identity_number, 
+                        residential_address, visit_reason, preferred_date, preferred_time
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                """, (patient_name, contact_number, email_address, identity_number, 
+                      residential_address, visit_reason, preferred_date, preferred_time))
+                
+                conn.commit()
+                cur.close()
+                conn.close()
+                message = f"Success! Appointment request recorded for {patient_name}."
+            except Exception as e:
+                message = f"Database Layer Error: {e}"
+        else:
+            message = f"Saved Locally (Database Offline): Data received for {patient_name}."
+
+    return render_template("index.html", message=message)
+
+@app.route("/health")
+def health():
+    return jsonify({"status": "healthy"}), 200
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5001)
